@@ -95,19 +95,16 @@ void TIM2_IRQHandler(void){
 
 	if ( TIM2->SR & TIM_SR_CC2IF){ // COMPRUBEA SI HUBO UNA CAPTURA EN EL CANAL 2
 		if ( encendido1==0){
-
-			t_inicial1=TIM2->CCR2; // SE GUARDA TODX EL RATO EL TIEMPO PARA CUANDO SE PRODUZCA EL FLANCO DE SUBIDA SE QUEDE GUARDADO EN LA VARIABLE
+			TIM2->CNT=0; //contador a 0, para contar el tiempo entre dos eventos
+			//t_inicial1=TIM2->CCR2; // SE GUARDA TODX EL RATO EL TIEMPO PARA CUANDO SE PRODUZCA EL FLANCO DE SUBIDA SE QUEDE GUARDADO EN LA VARIABLE
 			TIM2->CCER &= ~(1 << 1); // Pone a 0 el bit CC2P (captura en flanco de bajada)
 			encendido1=1; // SE PONE A UNO PORQUE HEMSO HECHO UN FLANCO DE BAJADA
 
 		}else{
 
-			t_final1=TIM2->CCR2; // COGE EEL TIEMPO FINAL
-			TIM2->CCER |= (1<<1); //VOLVEMOS AL FLANCO DE SUBIDA
 			encendido1=0;
-			if (t_final1>t_inicial1){
-			distancia1= (t_final1-t_inicial1)*	0.0343 / 2;
-			}
+			TIM2->CCER |= (1<<1); //VOLVEMOS AL FLANCO DE SUBIDA
+			t_final1=TIM2->CCR2; // COGE EEL TIEMPO FINAL es decir la duraciond del proyecto
 		}
 		TIM2->SR &= ~(1 << 2); // Limpiar la bandera CC2IF
 
