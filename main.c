@@ -63,7 +63,27 @@ static void MX_GPIO_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+void trigger_ON(){
 
+GPIOC->BSRR |= (1<<6);
+}
+
+void trigger_OFF(){
+GPIOC->BSRR |= (1<<(6+16));
+
+}
+
+void buzzerNO_SOUND(){
+
+GPIOB->BSRR |= (1<<8);
+
+}
+
+void buzzerSOUND(){
+
+GPIOB->BSRR |=(1<<(8+16));
+
+}
 
 /* USER CODE END 0 */
 
@@ -71,7 +91,7 @@ static void MX_GPIO_Init(void);
   * @brief  The application entry point.
   * @retval int
   */
-void INTERRUPTIM2(void){
+void TIM2_IRQHandler(void){
 
 	if ( TIM2->SR & TIM_SR_CC2IF){ // COMPRUBEA SI HUBO UNA CAPTURA EN EL CANAL 2
 		if ( encendido1==0){
